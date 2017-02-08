@@ -13,7 +13,7 @@ class XKCD {
      * @returns {Promise<Comic>}
      */
     static fetchComic(id){
-        if (!id) return this.constructor.fetchCurrent();
+        if (!id) return this.fetchCurrent();
         if (id) id = `/${id}`;
 
         return request.get(`${ BASE_URL }${ id }${ URL_PATH }`)
@@ -34,7 +34,7 @@ class XKCD {
      * @returns {Promise<Comic>}
      */
     static fetchRandom(){
-        return this.constructor.fetchCurrent().then(current => {
+        return this.fetchCurrent().then(current => {
             let id = Math.random() * current.id | 0;
             if (id === 404) id += Math.random() < 0.5;
 
@@ -51,7 +51,7 @@ class XKCD {
         return request.get(`${ RELEVANT_URL }${ query }`)
         .then(res => {
             const id = res.text.split(' ').slice(2)[0].trim();
-            return this.constructor.fetchComic(id);
+            return this.fetchComic(id);
         });
     }
 
@@ -64,7 +64,7 @@ class XKCD {
         return request.get(`${ RELEVANT_URL }${ query }`)
         .then(res => {
             const ids = res.text.split(' ').slice(2).filter((x, i) => !(i % 2));
-            const comics = ids.map(id => this.constructor.fetchComic(id.trim()));
+            const comics = ids.map(id => this.fetchComic(id.trim()));
             return Promise.all(comics);
         });
     }
