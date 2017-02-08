@@ -6,55 +6,71 @@ const URL_PATH = '/info.0.json';
 const RELEVANT_URL = 'https://relevantxkcd.appspot.com/process?action=xkcd&query=';
 const EXPLAIN_URL = 'http://www.explainxkcd.com/wiki/index.php';
 
-/**
- * Fetches a comic.
- * @param {number} [id] - ID of the comic. Leave empty for current comic.
- * @returns {Promise<Comic>}
- */
-module.exports.fetchComic = (id) => {
-    if (!id) return this.fetchCurrent();
-    if (id) id = `/${id}`;
+class XKCD {
+    /**
+     * Fetches a comic.
+     * @param {number} [id] - ID of the comic. Leave empty for current comic.
+     * @returns {Promise<Comic>}
+     */
+    static fetchComic(id){
+        if (!id) return this.constructor.fetchCurrent();
+        if (id) id = `/${id}`;
 
-    return request.get(`${ BASE_URL }${ id }${ URL_PATH }`)
-    .then(res => new this.Comic(res.body));
-};
+        return request.get(`${ BASE_URL }${ id }${ URL_PATH }`)
+        .then(res => new Comic(res.body));
+    }
 
-/**
- * Fetches the current comic.
- * @returns {Promise<Comic>}
- */
-module.exports.fetchCurrent = () => {
-    return request.get(`${ BASE_URL }${ URL_PATH }`)
-    .then(res => new this.Comic(res.body));
-};
+    /**
+     * Fetches the current comic.
+     * @returns {Promise<Comic>}
+     */
+    static fetchCurrent(){
+        return request.get(`${ BASE_URL }${ URL_PATH }`)
+        .then(res => new Comic(res.body));
+    }
 
-/**
- * Fetches a relevant comic.
- * @param {string} query - Text to query.
- * @returns {Promise<Comic>}
- */
-module.exports.fetchRelevant = (query) => {
-    return request.get(`${ RELEVANT_URL }${ query }`)
-    .then(res => {
-        const id = res.text.split(' ').slice(2)[0].trim();
-        return this.fetchComic(id);
-    });
-};
+    /**
+     * Fetches a random comic.
+     * @returns {Promise<Comic>}
+     */
+    static fetchRandom(){
+        return this.constructor.fetchCurrent().then(current => {
+            let id = Math.random() * current.id | 0;
+            if (id === 404) id += Math.random() < 0.5;
 
-/**
- * Fetches all relevant comics.
- * @param {string} query - Text to query.
- * @returns {Promise<Comic[]>}
- */
-module.exports.fetchAllRelevant = (query) => {
-    return request.get(`${ RELEVANT_URL }${ query }`)
-    .then(res => {
-        const ids = res.text.split(' ').slice(2).filter((x, i) => i % 2 === 0);
-        return Promise.all(ids.map(id => this.fetchComic(id.trim())));
-    });
-};
+            return this.fetchComic(id);
+        });
+    }
 
-module.exports.Comic = class Comic {
+    /**
+     * Fetches a relevant comic.
+     * @param {string} query - Text to query.
+     * @returns {Promise<Comic>}
+     */
+    static fetchRelevant(query){
+        return request.get(`${ RELEVANT_URL }${ query }`)
+        .then(res => {
+            const id = res.text.split(' ').slice(2)[0].trim();
+            return this.constructor.fetchComic(id);
+        });
+    }
+
+    /**
+     * Fetches all relevant comics.
+     * @param {string} query - Text to query.
+     * @returns {Promise<Comic[]>}
+     */
+    static fetchAllRelevant(query){
+        return request.get(`${ RELEVANT_URL }${ query }`)
+        .then(res => {
+            const ids = res.text.split(' ').slice(2).filter((x, i) => !(i % 2));
+            const comics = ids.map(id => this.constructor.fetchComic(id.trim()));
+            return Promise.all(comics);
+        });
+    }
+}
+
+class Comic {
     constructor(data = {}){
         /**
          * ID of comic.
@@ -116,16 +132,16 @@ module.exports.Comic = class Comic {
         this.altText = data.alt;
 
         /**
-         * URL to image.
-         * @type {string}
-         */
-        this.imageURL = data.img;
-
-        /**
          * URL to XKCD page.
          * @type {string}
          */
         this.xkcdURL = `${ BASE_URL }/${ this.id }`;
+
+        /**
+         * URL to image.
+         * @type {string}
+         */
+        this.imageURL = data.img;
 
         /**
          * URL to explain xkcd page.
@@ -141,4 +157,7 @@ module.exports.Comic = class Comic {
     fetchImage(){
         return request.get(this.imageURL).then(res => res.body);
     }
-};
+}
+
+module.exports = XKCD;
+module.exports.Comic = Comic;

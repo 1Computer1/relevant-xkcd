@@ -17,13 +17,13 @@ xkcd.fetchRelevant('meta').then(console.log);
     day: 27,
     month: 6,
     year: 2011,
-    date: 2011-06-27T04:00:00.000Z,
+    date: 2011-06-27, // Date object.
     title: 'Hofstadter',
     safeTitle: 'Hofstadter',
-    transcript: '[...]',
+    transcript: '[...]', // Too long for here!
     altText: '[...]',
-    imageURL: 'https://imgs.xkcd.com/comics/hofstadter.png',
     xkcdURL: 'https://xkcd.com/917',
+    imageURL: 'https://imgs.xkcd.com/comics/hofstadter.png',
     explainURL: 'http://www.explainxkcd.com/wiki/index.php/917'
   }
 ```
@@ -39,8 +39,13 @@ ID can be left blank for current comic.
 Fetches the current comic.  
 `=> Promise<Comic>`  
 
+### `xkcd.fetchRandom()`
+Fetches a random comic.  
+`=> Promise<Comic>`  
+
 ### `xkcd.fetchRelevant(query)`
 Fetches a comic relevant to query.  
+Uses [Relevant XKCD](https://relevantxkcd.appspot.com/).  
 `=> Promise<Comic>`  
 
 ### `xkcd.fetchAllRelevant(query)`
