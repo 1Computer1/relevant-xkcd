@@ -1,0 +1,19 @@
+{
+  "name": "relevant-xkcd",
+  "version": "1.0.0",
+  "description": "Gets relevant XKCD comics.",
+  "main": "xkcd.js",
+  "author": "1Computer",
+  "license": "MIT",
+  "dependencies": {
+    "superagent": "^3.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1Computer1/relevant-xkcd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/1Computer1/relevant-xkcd/issues"
+  },
+  "homepage": "https://github.com/1Computer1/relevant-xkcd"
+}
