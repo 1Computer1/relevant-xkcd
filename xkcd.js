@@ -1,4 +1,4 @@
-const request = require('superagent');
+const request = require('snekfetch');
 
 const BASE_URL = 'https://xkcd.com';
 const URL_PATH = '/info.0.json';

@@ -6,7 +6,7 @@
   "author": "1Computer",
   "license": "MIT",
   "dependencies": {
-    "superagent": "^3.4.1"
+    "snekfetch": "^2.2.0"
   },
   "repository": {
     "type": "git",
