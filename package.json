@@ -5,6 +5,9 @@
   "main": "xkcd.js",
   "author": "1Computer",
   "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "superagent": "^3.4.1"
   },
@@ -15,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/1Computer1/relevant-xkcd/issues"
   },
-  "homepage": "https://github.com/1Computer1/relevant-xkcd"
+  "homepage": "https://github.com/1Computer1/relevant-xkcd",
+  "devDependencies": {
+    "jest": "^21.2.1"
+  }
 }
