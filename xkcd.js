@@ -30,6 +30,20 @@ class XKCD {
   }
 
   /**
+   * Fetches the latest n comics.
+   * @returns {Promise<Comic[]>}
+   */
+  static async fetchNLatest (n) {
+    const latestComic = await this.fetchCurrent()
+    const latestId = latestComic.id
+
+    const arrayWithRightLength = Array(n).fill()
+    const idsToFetch = arrayWithRightLength.map((_, arrayIndex) => latestId - arrayIndex)
+    const comicPromises = idsToFetch.map(comicId => this.fetchComic(comicId))
+    return Promise.all(comicPromises)
+  }
+
+  /**
    * Fetches a random comic.
    * @returns {Promise<Comic>}
    */
