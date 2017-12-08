@@ -78,8 +78,9 @@ class XKCD {
   static fetchAllRelevant (query) {
     return request.get(`${ RELEVANT_URL }${ query }`)
       .then(res => {
-        const ids = res.text.split(' ').slice(2).filter((x, i) => !(i % 2))
-        const comics = ids.map(id => this.fetchComic(id.trim()))
+        const matches = res.text.match(/(\d+ .+)/g)  // example: 221 /wiki/images/f/fe/random_number.png
+        const ids = matches.map(line => line.match(/^\d+/)[0]).map(idString => parseInt(idString))
+        const comics = ids.map(id => this.fetchComic(id))
         return Promise.all(comics)
       })
   }

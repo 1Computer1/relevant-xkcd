@@ -21,6 +21,13 @@ test('fetches the correct comic', async () => {
   expect(comic).toEqual(expected)
 })
 
+test('fetches all relevant without current comic', async () => {
+  const currentComic = await XKCD.fetchCurrent()
+  const relevantComics = await XKCD.fetchAllRelevant('random')
+  const relevantIds = relevantComics.map(comic => comic.id)
+  expect(relevantIds).not.toContain(currentComic.id)
+})
+
 test('fetches the latest entries with correct ids', async () => {
   const latestComic = await XKCD.fetchCurrent()
   const actual = await XKCD.fetchNLatest(3)
