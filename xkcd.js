@@ -137,7 +137,7 @@ class Comic {
      * May be unavailable for newer comics.
      * @type {string}
      */
-    this.transcript = data.transcript
+    this.transcript = this.id <= 1608 ? data.transcript : '' // Last valid transcript is on #1608 (https://www.explainxkcd.com/wiki/index.php/Transcript_on_xkcd)
 
     /**
      * Comic alt-text.
