@@ -37,7 +37,11 @@ ID can be left blank for current comic.
 
 ### `xkcd.fetchCurrent()`
 Fetches the current comic.  
-`=> Promise<Comic>`  
+`=> Promise<Comic>`
+
+### `xkcd.fetchNLatest(n)`
+Fetches the n latest comics.
+`=> Promise<Comic[]>`
 
 ### `xkcd.fetchRandom()`
 Fetches a random comic.  
