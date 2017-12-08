@@ -30,15 +30,16 @@ class XKCD {
   }
 
   /**
-   * Fetches the latest n comics.
+   * Fetches the latest n comics. Optional offset determines how many comics to skip.
    * @returns {Promise<Comic[]>}
    */
-  static async fetchNLatest (n) {
+  static async fetchNLatest (n, offset) {
     const latestComic = await this.fetchCurrent()
-    const latestId = latestComic.id
+    const effectiveOffset = offset || 0
+    const idToFetch = latestComic.id - effectiveOffset
 
     const arrayWithRightLength = Array(n).fill()
-    const idsToFetch = arrayWithRightLength.map((_, arrayIndex) => latestId - arrayIndex)
+    const idsToFetch = arrayWithRightLength.map((_, arrayIndex) => idToFetch - arrayIndex)
     const comicPromises = idsToFetch.map(comicId => this.fetchComic(comicId))
     return Promise.all(comicPromises)
   }

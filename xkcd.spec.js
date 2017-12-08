@@ -21,9 +21,17 @@ test('fetches the correct comic', async () => {
   expect(comic).toEqual(expected)
 })
 
-test('fetches the the latest entries with correct ids', async () => {
-  const latestComic = await XKCD.fetchCurrent();
-  const actual = await XKCD.fetchNLatest(3);
+test('fetches the latest entries with correct ids', async () => {
+  const latestComic = await XKCD.fetchCurrent()
+  const actual = await XKCD.fetchNLatest(3)
   const actualIds = actual.map(comic => comic.id)
   expect(actualIds).toEqual([latestComic.id, latestComic.id - 1, latestComic.id - 2])
+})
+
+test('fetches latest entries with offset', async () => {
+  const latestComic = await XKCD.fetchCurrent()
+  const offset = 10
+  const actual = await XKCD.fetchNLatest(3, offset)
+  const actualIds = actual.map(comic => comic.id)
+  expect(actualIds).toEqual([latestComic.id - offset, latestComic.id - offset - 1, latestComic.id - offset - 2])
 })
